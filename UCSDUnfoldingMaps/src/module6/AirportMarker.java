@@ -33,7 +33,7 @@ public class AirportMarker extends CommonMarker {
 	@Override
 	public void showTitle(PGraphics pg, float x, float y) {
 		 // show rectangle with title
-		
+		 
 		// show routes
 		
 		

@@ -200,7 +200,7 @@ public class EarthquakeCityMap extends PApplet {
 	                EarthquakeMarker eqMarker = (EarthquakeMarker) mhide;
 	                if (eqMarker.getDistanceTo(marker.getLocation())
 	                        > eqMarker.threatCircle()) {
-	                    mhide.setHidden(true);
+	                    eqMarker.setHidden(true);
 	                }
 	            }
 	            return;
