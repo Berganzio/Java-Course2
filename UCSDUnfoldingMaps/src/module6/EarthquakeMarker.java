@@ -188,8 +188,4 @@ public abstract class EarthquakeMarker extends CommonMarker implements Comparabl
 	{
 		return isOnLand;
 	}
-	
-
-	
-	
 }

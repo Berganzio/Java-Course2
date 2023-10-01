@@ -2,6 +2,7 @@ package module6;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -64,6 +65,13 @@ public class EarthquakeCityMap extends PApplet {
 	// NEW IN MODULE 5
 	private CommonMarker lastSelected;
 	private CommonMarker lastClicked;
+
+	// NEW for popup display
+	private boolean shouldDisplayPopup = false;
+	private int earthquakeCount;
+	private float averageMagnitude;
+	private int popupDisplayTime;
+
 	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
@@ -85,7 +93,7 @@ public class EarthquakeCityMap extends PApplet {
 		//earthquakesURL = "test2.atom";
 		
 		// Uncomment this line to take the quiz
-		//earthquakesURL = "quiz2.atom";
+		earthquakesURL = "quiz2.atom";
 		
 		
 		// (2) Reading in earthquake data and geometric properties
@@ -124,6 +132,7 @@ public class EarthquakeCityMap extends PApplet {
 	    map.addMarkers(quakeMarkers);
 	    map.addMarkers(cityMarkers);
 	    
+		sortAndPrint(30);
 	    
 	}  // End setup
 	
@@ -133,11 +142,43 @@ public class EarthquakeCityMap extends PApplet {
 		map.draw();
 		addKey();
 		
+		// Check if a popup needs to be displayed
+		if (shouldDisplayPopup) {
+			fill(255, 255, 255);
+			int x = mouseX + 10;  // Coordinates for the popup (for example, next to the mouse cursor)
+			int y = mouseY + 10;
+			int width = 200;
+			int height = 70;
+			rect(x, y, width, height);
+
+			fill(0);
+			textSize(12);
+			text("Nearby Earthquakes: " + earthquakeCount, x + 10, y + 20);
+			text("Average Magnitude: " + averageMagnitude, x + 10, y + 40);
+		}
+		
+		// Check if two seconds have passed
+		if (millis() - popupDisplayTime > 1500) {
+			shouldDisplayPopup = false;
+			return;
+		}
 	}
 	
 	
 	// TODO: Add the method:
-	//   private void sortAndPrint(int numToPrint)
+	private void sortAndPrint(int numToPrint) {
+		Object[] quakeArray = quakeMarkers.toArray();
+		Arrays.sort(quakeArray, Collections.reverseOrder());
+		int count = 0;
+		for (Object q : quakeArray) {
+			if (count == numToPrint) {
+				break;
+			}
+			EarthquakeMarker eq = (EarthquakeMarker) q;
+			System.out.println(eq.getTitle() + " " + eq.getMagnitude());
+			count++;
+		}
+	}
 	// and then call that method from setUp
 	
 	/** Event handler that gets called automatically when the 
@@ -183,6 +224,14 @@ public class EarthquakeCityMap extends PApplet {
 	@Override
 	public void mouseClicked()
 	{
+		// Iterate through all city markers
+	    for (Marker city : cityMarkers) {
+	        if (city.isInside(map, mouseX, mouseY)) {
+	            // Handle the click event and display the popup
+	            displayPopup((CityMarker) city);
+	            break;
+	        }
+	    }
 		if (lastClicked != null) {
 			unhideMarkers();
 			lastClicked = null;
@@ -195,6 +244,35 @@ public class EarthquakeCityMap extends PApplet {
 			}
 		}
 	}
+	
+	private void displayPopup(CityMarker cityMarker) {
+		// Initialize variables to keep track of earthquake stats
+		int earthquakeCount = 0;
+		float totalMagnitude = 0;
+
+		Location cityLoc = cityMarker.getLocation();
+		for (Marker quake : quakeMarkers) {
+			EarthquakeMarker earthquakeMarker = (EarthquakeMarker) quake;
+			if (cityLoc.getDistance(earthquakeMarker.getLocation()) <= earthquakeMarker.threatCircle()) {
+				earthquakeCount++;
+				totalMagnitude += earthquakeMarker.getMagnitude();
+			}
+		}
+
+		// Calculate average magnitude
+		if (earthquakeCount > 0) {
+			averageMagnitude = totalMagnitude / earthquakeCount;
+		}
+
+		// Set class-level variables for drawing the popup
+		this.earthquakeCount = earthquakeCount;
+		this.shouldDisplayPopup = true;
+
+		// record the time when the popup was displayed
+		this.popupDisplayTime = millis();
+	}
+
+
 	
 	// Helper method that will check if a city marker was clicked on
 	// and respond appropriately
