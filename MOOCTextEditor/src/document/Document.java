@@ -62,14 +62,33 @@ public abstract class Document {
 	 *       is not considered a syllable unless the word has no other syllables. 
 	 *       You should consider y a vowel.
 	 */
-	protected int countSyllables(String word)
-	{
-		// TODO: Implement this method so that you can call it from the 
-	    // getNumSyllables method in BasicDocument (module 2) and 
-	    // EfficientDocument (module 3).
-	    return 0;
-	}
-	
+		protected int countSyllables(String word) {
+			int numSyllables = 0;
+			boolean isNewSyllable = true;
+			String vowels = "aeiouy";
+			char[] charArray = word.toCharArray();
+			
+			for (int i = 0; i < charArray.length; i++) {
+				// If the current character is 'e' and it's the last character in the word
+				// and it's not the only syllable in the word, then it's not a syllable
+				if (i == charArray.length-1 && Character.toLowerCase(charArray[i]) == 'e' 
+						&& isNewSyllable && numSyllables > 0) {
+					numSyllables--;
+				}
+				// If the current character is a vowel and it's the start of a new syllable
+				// then increment the syllable count and mark that we're not at the start of a new syllable
+				if (isNewSyllable && vowels.indexOf(Character.toLowerCase(charArray[i])) >= 0) {
+					isNewSyllable = false;
+					numSyllables++;
+				}
+				// If the current character is not a vowel, then mark that we're at the start of a new syllable
+				else if (vowels.indexOf(Character.toLowerCase(charArray[i])) < 0) {
+					isNewSyllable = true;
+				}
+			}
+			return numSyllables;
+		}
+
 	/** A method for testing
 	 * 
 	 * @param doc The Document object to test
@@ -130,8 +149,19 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-		String text = getText();
-		int numChars = text.length();
-		return numChars;
+		// Get the number of words
+		int numWords = getNumWords();
+		
+		// Get the number of sentences
+		int numSentences = getNumSentences();
+		
+		// Get the number of syllables
+		int numSyllables = getNumSyllables();
+		
+		// Calculate the Flesch readability score
+		double fleschScore = 206.835 - 1.015 * ((double) numWords / numSentences) - 84.6 * ((double) numSyllables / numWords);
+		
+		// Return the Flesch readability score
+	    return fleschScore;
 	}
 }
