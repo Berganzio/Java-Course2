@@ -13,8 +13,7 @@ public class LaunchClass {
 	
 	public document.Document getDocument(String text) {
 		// Change this to BasicDocument(text) for week 1 only
-		return new document.BasicDocument(text);
-		// TODO: remember to change it to EfficientDocument for next week's assignment
+		return new document.EfficientDocument(text);
 	}
 	
 	public textgen.MarkovTextGenerator getMTG() {
