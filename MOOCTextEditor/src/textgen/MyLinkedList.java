@@ -64,6 +64,9 @@ public class MyLinkedList<E> extends AbstractList<E> {
 		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException();
 		}
+		if (element == null || element == "") {
+			throw new NullPointerException();
+		}
 		LLNode<E> newNode = new LLNode<E>(element);
 		LLNode<E> curr = head;
 		for (int i = 0; i <= index; i++) {
@@ -95,6 +98,9 @@ public class MyLinkedList<E> extends AbstractList<E> {
 		if (index < 0 || index >= size) {
 			throw new IndexOutOfBoundsException();
 		}
+		if (size == 0) {
+			return null;
+		}
 		LLNode<E> curr = head; // curr is the node to be removed
 		for (int i = 0; i <= index; i++) {
 			curr = curr.next;
@@ -116,6 +122,9 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	{
 		if (index < 0 || index >= size) {
 			throw new IndexOutOfBoundsException();
+		}
+		if (element == null) {
+			throw new NullPointerException();
 		}
 		LLNode<E> curr = head; // curr is the node to be replaced
 		for (int i = 0; i <= index; i++) {

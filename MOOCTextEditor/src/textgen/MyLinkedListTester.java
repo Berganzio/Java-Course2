@@ -114,8 +114,19 @@ public class MyLinkedListTester {
 		assertEquals("Remove: check a is correct ", 65, a);
 		assertEquals("Remove: check element 0 is correct ", (Integer)21, list1.get(0));
 		assertEquals("Remove: check size is correct ", 2, list1.size());
+		try {
+			list1.remove(-1);
+			fail("Expected an IndexOutOfBoundsException to be thrown");
+		} catch (IndexOutOfBoundsException e) {
+			assertEquals("IndexOutOfBoundsException message", "Index: -1, Size: 2", e.getMessage());
+		}
 
-		
+		try {
+			list1.remove(5);
+			fail("Expected an IndexOutOfBoundsException to be thrown");
+		} catch (IndexOutOfBoundsException e) {
+			assertEquals("IndexOutOfBoundsException message", "Index: 5, Size: 2", e.getMessage());
+		}
 	}
 	
 	/** Test adding an element into the end of the list, specifically
@@ -165,6 +176,30 @@ public class MyLinkedListTester {
 		assertEquals("AddAtIndex: check element 0 is correct ", (Integer)100, list1.get(0));
 		assertEquals("AddAtIndex: check element 1 is correct ", (Integer)200, list1.get(1));
 		assertEquals("AddAtIndex: check element 2 is correct ", (Integer)65, list1.get(2));
+
+		// Test adding an element at too low of an index
+		try {
+			list1.add(-1, 50);
+			fail("Expected an IndexOutOfBoundsException to be thrown");
+		} catch (IndexOutOfBoundsException e) {
+			assertEquals("IndexOutOfBoundsException message", "Index: -1, Size: 3", e.getMessage());
+		}
+		
+		// Test adding an element at too high of an index
+		try {
+			list1.add(5, 50);
+			fail("Expected an IndexOutOfBoundsException to be thrown");
+		} catch (IndexOutOfBoundsException e) {
+			assertEquals("IndexOutOfBoundsException message", "Index: 5, Size: 3", e.getMessage());
+		}
+
+		// Test adding a null element
+		try {
+			list1.add(1, null);
+			fail("Expected a NullPointerException to be thrown");
+		} catch (NullPointerException e) {
+			assertEquals("NullPointerException message", null, e.getMessage());
+		}
 		
 	}
 	
@@ -178,6 +213,29 @@ public class MyLinkedListTester {
 		assertEquals("Set: check element 2 is correct ", (Integer)100, list1.get(2));
 		assertEquals("Set: check size is correct ", 3, list1.size());
 
+		// Test setting an element at too low of an index
+		try {
+			list1.set(-1, 50);
+			fail("Expected an IndexOutOfBoundsException to be thrown");
+		} catch (IndexOutOfBoundsException e) {
+			assertEquals("IndexOutOfBoundsException message", "Index: -1, Size: 3", e.getMessage());
+		}
+
+		// Test setting an element at too high of an index
+		try {
+			list1.set(5, 50);
+			fail("Expected an IndexOutOfBoundsException to be thrown");
+		} catch (IndexOutOfBoundsException e) {
+			assertEquals("IndexOutOfBoundsException message", "Index: 5, Size: 3", e.getMessage());
+		}
+
+		// Test setting an element to null
+		try {
+			list1.set(1, null);
+			fail("Expected a NullPointerException to be thrown");
+		} catch (NullPointerException e) {
+			assertEquals("NullPointerException message", null, e.getMessage());
+		}
 	}
 	
 	
