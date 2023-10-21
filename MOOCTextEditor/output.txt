@@ -1,0 +1,71 @@
+
+printing textString: 
+Hello.  Hello there.  This is a test.  Hello there.  Hello Bob.  Test again.
+
+printing gen: 
+Hello.: Hello->
+Hello: there.->there.->Bob.->
+there.: This->Hello->
+This: is->
+is: a->
+a: test.->
+test.: Hello->
+Bob.: Test->
+Test: again.->
+again.: Hello.->
+
+
+printing generateText(20): 
+Hello. Hello there. Hello Bob. Test again. Hello. Hello there. This is a test. Hello Bob. Test again. Hello. Hello Bob.
+
+printing textString2: 
+You say yes, I say no, You say stop, and I say go, go, go, Oh no. You say goodbye and I say hello, hello, hello, I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello. I say high, you say low, You say why, and I say I don't know. Oh no. You say goodbye and I say hello, hello, hello. I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello. Why, why, why, why, why, why, Do you say goodbye. Oh no. You say goodbye and I say hello, hello, hello. I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello. You say yes, I say no, You say stop and I say go, go, go. Oh, oh no. You say goodbye and I say hello, hello, hello. I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello, hello, hello,
+
+printing gen: 
+You: say->say->say->say->say->say->say->say->say->
+say: yes,->no,->stop,->go,->goodbye->hello,->goodbye,->hello,->goodbye,->hello.->high,->low,->why,->I->goodbye->hello,->goodbye,->hello,->goodbye,->hello.->goodbye.->goodbye->hello,->goodbye,->hello,->goodbye,->hello.->yes,->no,->stop->go,->goodbye->hello,->goodbye,->hello,->goodbye,->hello,->goodbye,->hello,->
+yes,: I->I->
+I: say->say->say->don't->say->don't->say->say->say->don't->say->don't->say->don't->say->say->don't->say->don't->say->say->say->say->don't->say->don't->say->don't->say->
+no,: You->You->
+stop,: and->
+and: I->I->I->I->I->I->I->
+go,: go,->go,->Oh->go,->go.->
+Oh: no.->no.->no.->
+no.: You->You->You->You->
+goodbye: and->and->and->and->
+hello,: hello,->hello,->I->hello,->hello,->I->hello,->hello.->hello,->hello,->I->hello,->hello.->hello,->hello,->I->hello,->hello.->hello,->hello,->I->hello,->hello,->I->hello,->hello,->You->
+don't: know->know->know.->know->know->know->know->know->know->know->
+know: why->why->why->why->why->why->why->why->why->
+why: you->you->you->you->you->you->you->you->you->
+you: say->say->say->say->say->say->say->say->say->say->say->
+goodbye,: I->I->I->I->I->I->I->I->I->
+hello.: I->I->Why,->I->You->I->
+high,: you->
+low,: You->
+why,: and->why,->why,->why,->why,->Do->
+know.: Oh->
+Why,: why,->
+Do: you->
+goodbye.: Oh->
+stop: and->
+go.: Oh,->
+Oh,: oh->
+oh: no.->
+
+
+printing generateText(40): 
+You say goodbye and I don't know why you say hello, hello, hello, I don't know why you say no, You say goodbye and I don't know why you say high, you say stop and I say goodbye, I say yes,
+
+Testing helper methods for debugging
+
+Testing getSentences()
+[You say yes, I say no, You say stop, and I say go, go, go, Oh no., You say goodbye and I say hello, hello, hello, I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello., I say high, you say low, You say why, and I say I don't know., Oh no., You say goodbye and I say hello, hello, hello., I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello., Why, why, why, why, why, why, Do you say goodbye., Oh no., You say goodbye and I say hello, hello, hello., I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello., You say yes, I say no, You say stop and I say go, go, go., Oh, oh no., You say goodbye and I say hello, hello, hello., I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello, hello, hello, I don't know why you say goodbye, I say hello, hello, hello,]
+
+Testing getWordsThatFollow() with the word "you"
+[say, say, say, say, say, say, say, say, say, say, say]
+
+Testing getUniqueWords()
+[no, don't, yes, goodbye, go, I, why, Why, say, Do, high, stop, low, and, Oh, know, oh, hello, You, you]
+
+Testing getWords()
+[You, say, yes, I, say, no, You, say, stop, and, I, say, go, go, go, Oh, no, You, say, goodbye, and, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, I, say, high, you, say, low, You, say, why, and, I, say, I, don't, know, Oh, no, You, say, goodbye, and, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, Why, why, why, why, why, why, Do, you, say, goodbye, Oh, no, You, say, goodbye, and, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, You, say, yes, I, say, no, You, say, stop, and, I, say, go, go, go, Oh, oh, no, You, say, goodbye, and, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, hello, hello, I, don't, know, why, you, say, goodbye, I, say, hello, hello, hello]
