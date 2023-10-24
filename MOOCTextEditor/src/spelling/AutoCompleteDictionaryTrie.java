@@ -39,8 +39,22 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+	    word = word.toLowerCase();
+		TrieNode curr = root;
+		for (int i = 0; i < word.length(); i++) {
+			Character c = word.charAt(i);
+			if (curr.getChild(c) == null) {
+				curr.insert(c);
+			}
+			curr = curr.getChild(c);
+		}
+		if (curr.endsWord()) {
+			return false;
+		} else {
+			curr.setEndsWord(true);
+			size++;
+			return true;
+		}
 	}
 	
 	/** 
@@ -49,8 +63,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
-	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -59,8 +72,16 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    // TODO: Implement this method
-		return false;
+	    s = s.toLowerCase();
+		TrieNode curr = root;
+		for (int i = 0; i < s.length(); i++) {
+			Character c = s.charAt(i);
+			if (curr.getChild(c) == null) {
+				return false;
+			}
+			curr = curr.getChild(c);
+		}
+		return curr.endsWord();
 	}
 
 	/** 
@@ -84,25 +105,46 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
      * @param numCompletions The maximum number of predictions desired.
      * @return A list containing the up to numCompletions best predictions
      */@Override
-     public List<String> predictCompletions(String prefix, int numCompletions) 
-     {
-    	 // TODO: Implement this method
-    	 // This method should implement the following algorithm:
-    	 // 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
-    	 //    empty list
-    	 // 2. Once the stem is found, perform a breadth first search to generate completions
-    	 //    using the following algorithm:
-    	 //    Create a queue (LinkedList) and add the node that completes the stem to the back
-    	 //       of the list.
-    	 //    Create a list of completions to return (initially empty)
-    	 //    While the queue is not empty and you don't have enough completions:
-    	 //       remove the first Node from the queue
-    	 //       If it is a word, add it to the completions list
-    	 //       Add all of its child nodes to the back of the queue
-    	 // Return the list of completions
-    	 
-         return null;
-     }
+    public List<String> predictCompletions(String prefix, int numCompletions) 
+    {
+    	// TODO: Implement this method
+    	// This method should implement the following algorithm:
+    	// 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
+    	//    empty list
+    	// 2. Once the stem is found, perform a breadth first search to generate completions
+    	//    using the following algorithm:
+    	//    Create a queue (LinkedList) and add the node that completes the stem to the back
+    	//       of the list.
+    	//    Create a list of completions to return (initially empty)
+    	//    While the queue is not empty and you don't have enough completions:
+    	//       remove the first Node from the queue
+    	//       If it is a word, add it to the completions list
+    	//       Add all of its child nodes to the back of the queue
+    	// Return the list of completions
+
+		prefix = prefix.toLowerCase();
+		TrieNode curr = root;
+		for (int i = 0; i < prefix.length(); i++) {
+			Character c = prefix.charAt(i);
+			if (curr.getChild(c) == null) {
+				return new LinkedList<>();
+			}
+			curr = curr.getChild(c);
+		}
+		List<TrieNode> queue = new LinkedList<>();
+		queue.add(curr);
+		List<String> completions = new LinkedList<>();
+		while (!queue.isEmpty() && completions.size() < numCompletions) {
+			TrieNode node = queue.remove(0);
+			if (node.endsWord()) {
+				completions.add(node.getText());
+			}
+			for (Character c : node.getValidNextCharacters()) {
+				queue.add(node.getChild(c));
+			}
+		}
+		return completions;
+	}
 
  	// For debugging
  	public void printTree()
