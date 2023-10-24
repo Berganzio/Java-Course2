@@ -1,2 +1,4 @@
+/application/
 /document/
-*.class
+/spelling/
+/textgen/
