@@ -10,7 +10,10 @@ import java.util.List;
 
 
 /**
- * @author UC San Diego Intermediate MOOC team
+ * This class implements the SpellingSuggest interface and uses a 
+ * a trie to suggest correctly spelled words for a misspelled word.
+ * 
+ * @author UC San Diego Intermediate 
  *
  */
 public class NearbyWords implements SpellingSuggest {
@@ -37,6 +40,7 @@ public class NearbyWords implements SpellingSuggest {
 		   insertions(s, retList, wordsOnly);
 		   substitution(s, retList, wordsOnly);
 		   deletions(s, retList, wordsOnly);
+		   transposition(s, retList, wordsOnly);
 		   return retList;
 	}
 
@@ -87,6 +91,25 @@ public class NearbyWords implements SpellingSuggest {
 				}
 			}
 		}
+		// consider adding a character at the beginning and end of the string
+		for(int charCode = (int)'a'; charCode <= (int)'z'; charCode++) {
+			StringBuffer sb = new StringBuffer(s);
+			sb.insert(0, (char)charCode);
+			if(!currentList.contains(sb.toString()) && 
+					(!wordsOnly||dict.isWord(sb.toString())) &&
+					!s.equals(sb.toString())) {
+				currentList.add(sb.toString());
+			}
+		}
+		for(int charCode = (int)'a'; charCode <= (int)'z'; charCode++) {
+			StringBuffer sb = new StringBuffer(s);
+			sb.insert(sb.length(), (char)charCode);
+			if(!currentList.contains(sb.toString()) && 
+					(!wordsOnly||dict.isWord(sb.toString())) &&
+					!s.equals(sb.toString())) {
+				currentList.add(sb.toString());
+			}
+		}
 	}
 
 	/** Add to the currentList Strings that are one character deletion away
@@ -100,6 +123,27 @@ public class NearbyWords implements SpellingSuggest {
 		for(int index = 0; index < s.length(); index++){
 			StringBuffer sb = new StringBuffer(s);
 			sb.deleteCharAt(index);
+			if(!currentList.contains(sb.toString()) && 
+					(!wordsOnly||dict.isWord(sb.toString())) &&
+					!s.equals(sb.toString())) {
+				currentList.add(sb.toString());
+			}
+		}
+	}
+
+	/** Add to the currentList Strings that are one character transposition away
+	 * from the input string.  
+	 * @param s The original String
+	 * @param currentList is the list of words to append modified words 
+	 * @param wordsOnly controls whether to return only words or any String
+	 * @return
+	 */
+	public void transposition(String s, List<String> currentList, boolean wordsOnly ) {
+		for(int index = 0; index < s.length() - 1; index++){
+			StringBuffer sb = new StringBuffer(s);
+			char temp = sb.charAt(index);
+			sb.setCharAt(index, sb.charAt(index+1));
+			sb.setCharAt(index+1, temp);
 			if(!currentList.contains(sb.toString()) && 
 					(!wordsOnly||dict.isWord(sb.toString())) &&
 					!s.equals(sb.toString())) {
@@ -129,15 +173,19 @@ public class NearbyWords implements SpellingSuggest {
 		visited.add(word);
 					
 		// Implement the remainder of this method
-		while(!queue.isEmpty() && retList.size() < numSuggestions) {
+		// use THRESHOLD to control size of words explored
+		while(!queue.isEmpty() && retList.size() < numSuggestions && visited.size() < THRESHOLD) {
 			String curr = queue.remove(0);
+			System.out.println("Current word: " + curr);
 			List<String> neighbors = distanceOne(curr, true);
+			System.out.println("Neighbors: " + neighbors);
 			for(String n : neighbors) {
 				if(!visited.contains(n)) {
 					visited.add(n);
 					queue.add(n);
 					if(dict.isWord(n)) {
 						retList.add(n);
+						System.out.println("Added to retList: " + n);
 					}
 				}
 			}
@@ -163,6 +211,30 @@ public class NearbyWords implements SpellingSuggest {
 	   List<String> suggest = w.suggestions(word, THRESHOLD);
 	   System.out.println("Spelling Suggestions for \""+word+"\" are:");
 	   System.out.println(suggest);
+
+	   // Test distanceOne
+		List<String> distanceOneResult = w.distanceOne("word", true);
+		System.out.println("Distance One for 'word': " + distanceOneResult);
+
+		// Test insertions
+		List<String> insertionsResult = new ArrayList<>();
+		w.insertions("word", insertionsResult, true);
+		System.out.println("Insertions for 'word': " + insertionsResult);
+
+		// Test substitutions
+		List<String> substitutionsResult = new ArrayList<>();
+		w.substitution("word", substitutionsResult, true);
+		System.out.println("Substitutions for 'word': " + substitutionsResult);
+
+		// Test deletions
+		List<String> deletionsResult = new ArrayList<>();
+		w.deletions("word", deletionsResult, true);
+		System.out.println("Deletions for 'word': " + deletionsResult);
+
+		// Test suggestions
+		List<String> suggestionsResult = w.suggestions("wird", 5);
+		System.out.println("Suggestions for 'wird': " + suggestionsResult);
+
 	}
 
 }
