@@ -24,13 +24,12 @@ public class WPTree implements WordPath {
 	
 	// This constructor is used by the Text Editor Application
 	// You'll need to create your own NearbyWords object here.
-	public WPTree () {
-		this.root = null;
-		// TODO initialize a NearbyWords object
-		// Dictionary d = new DictionaryHashSet();
-		// DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		// this.nw = new NearbyWords(d);
-	}
+public WPTree () {
+    this.root = null;
+    Dictionary d = new DictionaryHashSet();
+    DictionaryLoader.loadDictionary(d, "data/dict.txt");
+    this.nw = new NearbyWords(d);
+}
 	
 	//This constructor will be used by the grader code
 	public WPTree (NearbyWords nw) {
@@ -39,11 +38,42 @@ public class WPTree implements WordPath {
 	}
 	
 	// see method description in WordPath interface
-	public List<String> findPath(String word1, String word2) 
-	{
-	    // TODO: Implement this method.
-	    return new LinkedList<String>();
-	}
+public List<String> findPath(String word1, String word2) 
+{
+    // Create a queue of WPTreeNodes to hold words to explore
+    LinkedList<WPTreeNode> queue = new LinkedList<WPTreeNode>();
+    // Create a visited set to avoid exploring the same word multiple times
+    HashSet<String> visited = new HashSet<String>();
+    // Create a WPTreeNode for the starting word and add it to the queue and visited set
+    WPTreeNode start = new WPTreeNode(word1, null);
+    queue.add(start);
+    visited.add(word1);
+    
+    // While the queue is not empty and we haven't found the end word
+    while (!queue.isEmpty()) {
+        // Remove the first WPTreeNode from the queue
+        WPTreeNode curr = queue.removeFirst();
+        // Get a list of nearby words (one mutation away) from the current word
+        List<String> neighbors = nw.distanceOne(curr.getWord(), true);
+        // For each nearby word
+        for (String neighbor : neighbors) {
+            // If we haven't visited this word before
+            if (!visited.contains(neighbor)) {
+                // Create a new WPTreeNode for the word and add it as a child of the current node
+                WPTreeNode child = curr.addChild(neighbor);
+                // If the word is the end word, return the path from the start word to the end word
+                if (neighbor.equals(word2)) {
+                    return child.buildPathToRoot();
+                }
+                // Otherwise, add the child node to the queue and visited set
+                queue.addLast(child);
+                visited.add(neighbor);
+            }
+        }
+    }
+    // If we get here, we didn't find a path from the start word to the end word
+    return null;
+}
 	
 	// Method to print a list of WPTreeNodes (useful for debugging)
 	private String printQueue(List<WPTreeNode> list) {
@@ -54,8 +84,7 @@ public class WPTree implements WordPath {
 		}
 		ret+= "]";
 		return ret;
-	}
-	
+    }
 }
 
 /* Tree Node in a WordPath Tree. This is a standard tree with each
@@ -142,6 +171,4 @@ class WPTreeNode {
         ret+=(" ]\n");
         return ret;
     }
-
 }
-
