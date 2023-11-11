@@ -120,10 +120,19 @@ public abstract class Graph {
 	 * 
 	 * @return The degree sequence of this graph.
 	 */
-	public List<Integer> degreeSequence() {
-		// XXX: Implement in part 1 of week 2
-		return null;
-	}
+    public List<Integer> degreeSequence() {
+        List<Integer> degreeSequence = new ArrayList<>();
+        int numVertices = getNumVertices();
+
+        for (int v = 0; v < numVertices; v++) {
+            int degree = getNeighbors(v).size() + getInNeighbors(v).size();
+            degreeSequence.add(degree);
+        }
+
+        Collections.sort(degreeSequence, Collections.reverseOrder());
+
+        return degreeSequence;
+    }
 	
 	/**
 	 * Get all the vertices that are 2 away from the vertex in question.
