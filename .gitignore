@@ -1,5 +1,5 @@
-**.class
+*.class
 .vscode
-**.zip
-*bin/
+*.zip
+*/bin/
 *index.html
